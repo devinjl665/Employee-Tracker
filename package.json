@@ -1,0 +1,26 @@
+{
+  "name": "employee-tracker",
+  "version": "1.0.0",
+  "description": "## Description",
+  "main": "server.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "github.com/devinjl665/Note-Taker"
+  },
+  "keywords": [
+    "mysql",
+    "database",
+    "employee"
+  ],
+  "author": "devinjl665",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.3",
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.9.2"
+  }
+}
