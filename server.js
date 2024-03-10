@@ -1,9 +1,15 @@
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
-const sequelize = require('./config/connection');
 
+const db = mysql.createConnection({
+    host: 'localhost',
+    port: 3306,
+    user: 'root',
+    password: 'joyboy5!',
+    database: 'employee_db',
+});
 
-init();
+console.log('Welcome to your employee database!');
 
 function init (){
     loadPrompts();
@@ -35,7 +41,7 @@ function loadPrompts(){
                     viewDepartments();
                     break;
                 case 'View all roles':
-                    viewPositions();
+                    viewRoles();
                     break;
                 case 'View all employees':
                     viewEmployees();
@@ -44,7 +50,7 @@ function loadPrompts(){
                     addDepartment();
                     break;
                 case 'Add a role':
-                    addPosition();
+                    addRole();
                     break; 
                 case 'Add an employee':
                     addEmployee();
@@ -59,7 +65,7 @@ function loadPrompts(){
 
 
 function viewDepartments(){
-    mysql.query('Select * from departments', (err,rows) => {
+    db.query('Select * from departments', (err,rows) => {
         if(err) throw err;
 
 
@@ -72,8 +78,8 @@ function viewDepartments(){
 
 
 
-function viewPositions(){
-    mysql.query('Select * from positions', (err,rows) => {
+function viewRoles(){
+    db.query('Select * from roles', (err,rows) => {
         if(err) throw err;
 
 
@@ -88,7 +94,7 @@ function viewPositions(){
 
 
 function viewEmployees(){
-    mysql.query('Select * from employees', (err,rows) => {
+    db.query('Select * from employees', (err,rows) => {
         if(err) throw err;
 
 
@@ -104,17 +110,18 @@ function viewEmployees(){
 
 
 function addDepartment(){
-    const question = [
+    inquirer.prompt(
         {
             type: 'input',
-            name: 'department',
+            name: 'savedDepartment',
             message: 'Name the new department'
         }
-    ]
+    )
 
-    inquirer.prompt(question)
+
     .then(answer => {
-        mysql.query(`INSERT INTO departments(name) VALUES('${answer}')`, 
+        savedDepartment = answer.savedDepartment;
+        db.query(`INSERT INTO departments(name) VALUES('${answer}')`, 
         function (err, row){
             if (err) {
                 console.log(err);
@@ -122,14 +129,14 @@ function addDepartment(){
                 console.log('Department added to database!');
                 init();
             }
-    })
+        })
     
-})
+    })
 };
 
 
 
-function addPosition(){
+function addRole(){
     const question = [
         {
             type: 'input',
@@ -149,24 +156,24 @@ function addPosition(){
         {
             type: 'input',
             name: 'departmentId',
-            message: 'Creat a department id for role.'
+            message: 'Enter the department id for role.'
         }
     ]
 
     inquirer.prompt(question)
     .then(answer => {
-        mysql.query(`INSERT INTO role(id, title, salary, department_id) 
+        db.query(`INSERT INTO role(id, title, salary, department_id) 
         VALUES('${answer.id}', '${answer.title}', '${answer.salary}', ${answer.departmentId}')`, 
         function (err, row){
-            if (err) throw err;
-
-            console.log('Role added to database!')
-            })
+            if (err) {
+                console.log(err);
+            } else {
+                console.log('Role added to database!');
+                init();
+            }  
         })
+    })
 };
-
-
-
 
 
 
@@ -190,7 +197,7 @@ function addEmployee(){
         {
             type: 'input',
             name: 'positionId',
-            message: 'Create a role id for employee.'
+            message: 'Enter the role id for employee.'
         },
         {
             type: 'input',
@@ -201,12 +208,18 @@ function addEmployee(){
 
     inquirer.prompt(question)
     .then(answer => {
-        mysql.query(`INSERT INTO employees(id, lastName, firstName, position_id, manager_id) 
+        db.query(`INSERT INTO employees(id, lastName, firstName, position_id, manager_id) 
         VALUES('${answer.id}', '${answer.lastName}', '${answer.firstName}', ${answer.positionId}', ${answer.managerId}')`, 
         function (err, row){
-            if (err) throw err;
-
-            console.log('Employee added to database!')
-            })
+            if (err) {
+                console.log(err);
+            } else {
+            console.log('Employee added to database!');
+            init();
+            }
         })
+    })
 };
+
+
+init();
