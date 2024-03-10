@@ -12,11 +12,7 @@ const db = mysql.createConnection({
 console.log('Welcome to your employee database!');
 
 function init (){
-    loadPrompts();
-};
-
-
-function loadPrompts(){
+    console.log('Before inquirer prompt');
     inquirer.prompt([
         {
             type: 'list',
@@ -35,6 +31,7 @@ function loadPrompts(){
         }
     ])
     .then((choice) => {
+        console.log('After Inquirer Prompt');
         console.log(choice);
             switch (choice.choices){
                 case 'View all departments':
