@@ -32,91 +32,88 @@ function init() {
     ])
     .then((choice) => {
         console.log('After Inquirer Prompt');
-        console.log(choice);
-            switch (choice.choices){
-                case 'View all departments':
-                    viewDepartments();
-                    break;
-                case 'View all roles':
-                    viewRoles();
-                    break;
-                case 'View all employees':
-                    viewEmployees();
-                    break;
-                case 'Add a department':
-                    addDepartment();
-                    break;
-                case 'Add a role':
-                    addRole();
-                    break; 
-                case 'Add an employee':
-                    addEmployee();
-                    break;
-                case 'Update an employee position':
-                    updateEmployeePosition();
-                    break;
-                case 'Exit':
-                    process.exit();                   
-            }
-        })
-};
+        console.log('Choice:', choice.choices); // Log the choice to check its value
+        switch (choice.choices) {
+            case 'View all departments':
+                viewDepartments();
+                break;
+            case 'View all roles':
+                viewRoles();
+                break;
+            case 'View all employees':
+                viewEmployees();
+                break;
+            case 'Add a department':
+                addDepartment();
+                break;
+            case 'Add a role':
+                addRole();
+                break;
+            case 'Add an employee':
+                addEmployee();
+                break;
+            case 'Update an employee position':
+                updateEmployeePosition();
+                break;
+            case 'Exit':
+                process.exit();
+                break; // Make sure to add a break statement here
+            default:
+                console.log('Invalid choice'); // Log if the choice is not recognized
+        }
+        console.log('After switch statement'); // Log to check if this line is executed
+        init(); // Prompt again outside the switch statement
+    });    
+}
 
-
-function viewDepartments(){
-    db.query('Select * from departments', 
-    function (err, results) {
-        if(err) {
-            console.log(err);
+function viewDepartments() {
+    db.query('SELECT * FROM departments', function (err, results) {
+        if (err) {
+            console.error('Error viewing departments:', err);
         } else {
             console.table(results);
-            init();
         }
+        init();
     });
-};
+}
 
-
-function viewRoles(){
-    db.query('Select * from roles', 
-    function (err, results) {
-        if(err) {
-            console.log(err);
+function viewRoles() {
+    db.query('SELECT * FROM roles', function (err, results) {
+        if (err) {
+            console.error('Error viewing roles:', err);
         } else {
             console.table(results);
-            init();
         }
+        init();
     });
-};
+}
 
-
-function viewEmployees(){
-    db.query('Select * from employees', 
-    function (err, results) {
-        if(err) {
-            console.log(err);
+function viewEmployees() {
+    db.query('SELECT * FROM employees', function (err, results) {
+        if (err) {
+            console.error('Error viewing employees:', err);
         } else {
             console.table(results);
-            init();
         }
+        init();
     });
-};
-
+}
 
 function addDepartment() {
     inquirer.prompt({
         type: 'input',
-        name: 'savedDepartment',
+        name: 'departmentName',
         message: 'Name the new department'
     })
     .then(answer => {
-        savedDepartment = answer.savedDepartment;
-        db.query('INSERT INTO departments(name) VALUES(?)',
-        function (err, results){
+        const departmentName = answer.departmentName;
+        db.query('INSERT INTO departments(name) VALUES(?)', [departmentName], function (err, results) {
             if (err) {
-                console.log(err);
+                console.error('Error adding department:', err);
             } else {
                 console.log('Department added to the database!');
-                init();
             }
+            init();
         });
     });
 }
