@@ -33,7 +33,7 @@ function init() {
     .then((choice) => {
         console.log('After Inquirer Prompt');
         console.log(choice);
-            switch (choice.markdown){
+            switch (choice.choices){
                 case 'View all departments':
                     viewDepartments();
                     break;
@@ -81,7 +81,7 @@ function viewRoles(){
         if(err) {
             console.log(err);
         } else {
-            console.log(results);
+            console.table(results);
             init();
         }
     });
@@ -94,7 +94,7 @@ function viewEmployees(){
         if(err) {
             console.log(err);
         } else {
-            console.log(results);
+            console.table(results);
             init();
         }
     });
@@ -115,7 +115,6 @@ function addDepartment() {
                 console.log(err);
             } else {
                 console.log('Department added to the database!');
-                console.log(rows);
                 init();
             }
         });
@@ -149,10 +148,8 @@ function addRole(){
 
     inquirer.prompt(question)
     .then((answer) => {
-        savedRole = answer.savedRole;
-        savedRoleSalary = answer.savedRoleSalary;
-        savedDepartmentId = answer.savedDepartmentId;
-        db.query('INSERT INTO role(id, title, salary, department_id) VALUES(?)', 
+        db.query('INSERT INTO role(id, title, salary, department_id) VALUES(?, ?, ?, ?)', 
+        [answer.id, answer.title, answer.salary, answer.departmentId], 
         function (err, results){
             if (err) {
                 console.log(err);
@@ -196,11 +193,8 @@ function addEmployee(){
 
     inquirer.prompt(question)
     .then((answer) => {
-        savedFirstName = answer.savedFirstName;
-        savedLastName = answer.savedLastName;
-        savedRoleId = answer.savedRoleId;
-        savedManagerId = answer.savedManagerId;
-        db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?)', 
+        db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?, ?, ?, ?, ?)', 
+        [answer.id, answer.lastName, answer.firstName, answer.positionId, answer.managerId],
         function (err, results) {
             if (err) {
                 console.log(err);
