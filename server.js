@@ -11,7 +11,7 @@ const db = mysql.createConnection({
 
 console.log('Welcome to your employee database!');
 
-function init (){
+function init() {
     console.log('Before inquirer prompt');
     inquirer.prompt([
         {
@@ -33,7 +33,7 @@ function init (){
     .then((choice) => {
         console.log('After Inquirer Prompt');
         console.log(choice);
-            switch (choice.choices){
+            switch (choice.markdown){
                 case 'View all departments':
                     viewDepartments();
                     break;
@@ -55,20 +55,20 @@ function init (){
                 case 'Update an employee position':
                     updateEmployeePosition();
                     break;
-                case 'Exit':    
-                default: console.log('Welcome');                 
+                case 'Exit':
+                    process.exit();                   
             }
-    })
+        })
 };
 
 
 function viewDepartments(){
-    db.query('Select * from departments', (err, rows) => {
+    db.query('Select * from departments', 
+    function (err, results) {
         if(err) {
             console.log(err);
         } else {
-            console.log('Procured data from database:');
-            console.log(rows);
+            console.table(results);
             init();
         }
     });
@@ -76,12 +76,12 @@ function viewDepartments(){
 
 
 function viewRoles(){
-    db.query('Select * from roles', (err,rows) => {
+    db.query('Select * from roles', 
+    function (err, results) {
         if(err) {
             console.log(err);
         } else {
-            console.log('Procured data from database:');
-            console.log(rows);
+            console.log(results);
             init();
         }
     });
@@ -89,12 +89,12 @@ function viewRoles(){
 
 
 function viewEmployees(){
-    db.query('Select * from employees', (err,rows) => {
+    db.query('Select * from employees', 
+    function (err, results) {
         if(err) {
             console.log(err);
         } else {
-            console.log('Procured data from database:');
-            console.log(rows);
+            console.log(results);
             init();
         }
     });
@@ -108,9 +108,9 @@ function addDepartment() {
         message: 'Name the new department'
     })
     .then(answer => {
-        let savedDepartment = answer.savedDepartment;
-        db.query('INSERT INTO departments(name) VALUES(?)', [savedDepartment], 
-        function (err, rows){
+        savedDepartment = answer.savedDepartment;
+        db.query('INSERT INTO departments(name) VALUES(?)',
+        function (err, results){
             if (err) {
                 console.log(err);
             } else {
@@ -148,14 +148,16 @@ function addRole(){
     ]
 
     inquirer.prompt(question)
-    .then(answer => {
+    .then((answer) => {
+        savedRole = answer.savedRole;
+        savedRoleSalary = answer.savedRoleSalary;
+        savedDepartmentId = answer.savedDepartmentId;
         db.query('INSERT INTO role(id, title, salary, department_id) VALUES(?)', 
-        function (err, rows){
+        function (err, results){
             if (err) {
                 console.log(err);
             } else {
                 console.log('Role added to database!');
-                console.log(rows);
                 init();
             }  
         })
@@ -193,14 +195,17 @@ function addEmployee(){
     ]
 
     inquirer.prompt(question)
-    .then(answer => {
+    .then((answer) => {
+        savedFirstName = answer.savedFirstName;
+        savedLastName = answer.savedLastName;
+        savedRoleId = answer.savedRoleId;
+        savedManagerId = answer.savedManagerId;
         db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?)', 
-        function (err, rows){
+        function (err, results) {
             if (err) {
                 console.log(err);
             } else {
             console.log('Employee added to database!');
-            console.log(rows);
             init();
             }
         })
