@@ -24,16 +24,16 @@ function loadPrompts(){
             message: 'What would you like to do?',
             choices: [
                 'View all departments',
-                'View all positions',
+                'View all roles',
                 'View all employees',
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update an employee position'
+                'Update an employee position',
+                'Exit'
             ]
         }
     ])
-
     .then((choice) => {
         console.log(choice);
             switch (choice.choices){
@@ -58,6 +58,7 @@ function loadPrompts(){
                 case 'Update an employee position':
                     updateEmployeePosition();
                     break;
+                case 'Exit':    
                 default: console.log('Welcome');                 
             }
     })
@@ -65,75 +66,64 @@ function loadPrompts(){
 
 
 function viewDepartments(){
-    db.query('Select * from departments', (err,rows) => {
-        if(err) throw err;
-
-
-        console.log('Procured data from database:');
-        console.log(rows);
-        init();
+    db.query('Select * from departments', (err, rows) => {
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('Procured data from database:');
+            console.log(rows);
+            init();
+        }
     });
 };
-
-
 
 
 function viewRoles(){
     db.query('Select * from roles', (err,rows) => {
-        if(err) throw err;
-
-
-        console.log('Procured data from database:');
-        console.log(rows);
-        init();
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('Procured data from database:');
+            console.log(rows);
+            init();
+        }
     });
 };
-
-
-
 
 
 function viewEmployees(){
     db.query('Select * from employees', (err,rows) => {
-        if(err) throw err;
-
-
-        console.log('Procured data from database:');
-        console.log(rows);
-        Init();
+        if(err) {
+            console.log(err);
+        } else {
+            console.log('Procured data from database:');
+            console.log(rows);
+            init();
+        }
     });
 };
 
 
-
-
-
-
-function addDepartment(){
-    inquirer.prompt(
-        {
-            type: 'input',
-            name: 'savedDepartment',
-            message: 'Name the new department'
-        }
-    )
-
-
+function addDepartment() {
+    inquirer.prompt({
+        type: 'input',
+        name: 'savedDepartment',
+        message: 'Name the new department'
+    })
     .then(answer => {
-        savedDepartment = answer.savedDepartment;
-        db.query(`INSERT INTO departments(name) VALUES('${answer}')`, 
-        function (err, row){
+        let savedDepartment = answer.savedDepartment;
+        db.query('INSERT INTO departments(name) VALUES(?)', [savedDepartment], 
+        function (err, rows){
             if (err) {
                 console.log(err);
             } else {
-                console.log('Department added to database!');
+                console.log('Department added to the database!');
+                console.log(rows);
                 init();
             }
-        })
-    
-    })
-};
-
+        });
+    });
+}
 
 
 function addRole(){
@@ -162,19 +152,18 @@ function addRole(){
 
     inquirer.prompt(question)
     .then(answer => {
-        db.query(`INSERT INTO role(id, title, salary, department_id) 
-        VALUES('${answer.id}', '${answer.title}', '${answer.salary}', ${answer.departmentId}')`, 
-        function (err, row){
+        db.query('INSERT INTO role(id, title, salary, department_id) VALUES(?)', 
+        function (err, rows){
             if (err) {
                 console.log(err);
             } else {
                 console.log('Role added to database!');
+                console.log(rows);
                 init();
             }  
         })
     })
 };
-
 
 
 function addEmployee(){
@@ -208,13 +197,13 @@ function addEmployee(){
 
     inquirer.prompt(question)
     .then(answer => {
-        db.query(`INSERT INTO employees(id, lastName, firstName, position_id, manager_id) 
-        VALUES('${answer.id}', '${answer.lastName}', '${answer.firstName}', ${answer.positionId}', ${answer.managerId}')`, 
-        function (err, row){
+        db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?)', 
+        function (err, rows){
             if (err) {
                 console.log(err);
             } else {
             console.log('Employee added to database!');
+            console.log(rows);
             init();
             }
         })
