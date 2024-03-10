@@ -21,7 +21,7 @@ function loadPrompts(){
                 'View all positions',
                 'View all employees',
                 'Add a department',
-                'Add a position',
+                'Add a role',
                 'Add an employee',
                 'Update an employee position'
             ]
@@ -34,7 +34,7 @@ function loadPrompts(){
                 case 'View all departments':
                     viewDepartments();
                     break;
-                case 'View all positions':
+                case 'View all roles':
                     viewPositions();
                     break;
                 case 'View all employees':
@@ -43,7 +43,7 @@ function loadPrompts(){
                 case 'Add a department':
                     addDepartment();
                     break;
-                case 'Add a position':
+                case 'Add a role':
                     addPosition();
                     break; 
                 case 'Add an employee':
@@ -134,33 +134,33 @@ function addPosition(){
         {
             type: 'input',
             name: 'id',
-            message: 'Create an id for the position.'
+            message: 'Create an id for the role.'
         },
         {
             type: 'input',
             name: 'title',
-            message: 'What is the position title?'
+            message: 'What is the role title?'
         },
         {
             type: 'input',
             name: 'salary',
-            message: 'Enter salary for position.'
+            message: 'Enter salary for role.'
         },
         {
             type: 'input',
             name: 'departmentId',
-            message: 'Creat a department id for position.'
+            message: 'Creat a department id for role.'
         }
     ]
 
     inquirer.prompt(question)
     .then(answer => {
-        mysql.query(`INSERT INTO positions(id, title, salary, department_id) 
+        mysql.query(`INSERT INTO role(id, title, salary, department_id) 
         VALUES('${answer.id}', '${answer.title}', '${answer.salary}', ${answer.departmentId}')`, 
         function (err, row){
             if (err) throw err;
 
-            console.log('Position added to database!')
+            console.log('Role added to database!')
             })
         })
 };
@@ -190,7 +190,7 @@ function addEmployee(){
         {
             type: 'input',
             name: 'positionId',
-            message: 'Create a position id for employee.'
+            message: 'Create a role id for employee.'
         },
         {
             type: 'input',
