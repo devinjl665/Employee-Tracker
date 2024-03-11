@@ -50,7 +50,7 @@ function init() {
                 addEmployee();
                 break;
             case 'Update an employee role':
-                updateEmployeePosition();
+                updateEmployeeRole();
                 break;
             case 'Exit':
                 process.exit();
@@ -191,5 +191,67 @@ function addEmployee(){
     })
 };
 
+function updateEmployeeRole() {
+    db.query('SELECT * FROM employees', function (err, employees) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.table(employees);
 
+            db.query('SELECT * FROM roles', function (err, roles) {
+                if (err) {
+                    console.log(err);
+                } else {
+                    console.table(roles);
+
+                    inquirer.prompt([
+                        {
+                            name: 'employeeId',
+                            type: 'list',
+                            message: 'Select employee to update their role:',
+                            choices: employees.map(employee => ({
+                                name: `${employee.first_name} ${employee.last_name}`,
+                                value: employee.id
+                            }))
+                        },
+                        {
+                            name: 'roleId',
+                            type: 'list',
+                            message: 'Select new role for the employee:',
+                            choices: roles.map(role => ({
+                                name: role.title,
+                                value: role.id
+                            }))
+                        },
+                        {
+                            name: 'managerId',
+                            type: 'list',
+                            message: 'Select new manager for the employee:',
+                            choices: [
+                                employees.map(manager => ({
+                                    value: manager.id
+                                })),
+                                {
+                                    value: null
+                                }
+                            ]  
+                        }
+                    ])
+                    .then(answer => {
+                        const { employeeId, roleId, managerId } = answer;
+                        db.query('UPDATE employees SET role_id = ?, manager_id = ? WHERE id = ?', [roleId, managerId, employeeId], function (err, result) {
+                            if (err) {
+                                console.log(err);
+                            } else {
+                                console.log('Employee role and manager updated successfully!');
+                                init();
+                            }
+                        });
+                    });
+                }
+            });
+        }
+    });
+}
+                    
 init();
