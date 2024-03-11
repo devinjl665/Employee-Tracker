@@ -5,7 +5,7 @@ const db = mysql.createConnection({
     host: 'localhost',
     port: 3306,
     user: 'root',
-    password: 'joyboy5!',
+    password: 'JoyboyG5!',
     database: 'employee_db',
 });
 
@@ -16,7 +16,7 @@ function init() {
     inquirer.prompt([
         {
             type: 'list',
-            name: 'choices',
+            name: 'markdown',
             message: 'What would you like to do?',
             choices: [
                 'View all departments',
@@ -27,13 +27,11 @@ function init() {
                 'Add an employee',
                 'Update an employee position',
                 'Exit'
-            ]
+            ],
         }
     ])
-    .then((choice) => {
-        console.log('After Inquirer Prompt');
-        console.log('Choice:', choice.choices); // Log the choice to check its value
-        switch (choice.choices) {
+    .then((answer) => {
+        switch (answer.markdown) {
             case 'View all departments':
                 viewDepartments();
                 break;
@@ -57,14 +55,9 @@ function init() {
                 break;
             case 'Exit':
                 process.exit();
-                break; // Make sure to add a break statement here
-            default:
-                console.log('Invalid choice'); // Log if the choice is not recognized
         }
-        console.log('After switch statement'); // Log to check if this line is executed
-        init(); // Prompt again outside the switch statement
     });    
-}
+};
 
 function viewDepartments() {
     db.query('SELECT * FROM departments', function (err, results) {
@@ -72,10 +65,10 @@ function viewDepartments() {
             console.error('Error viewing departments:', err);
         } else {
             console.table(results);
-        }
-        init();
+            init();
+        }    
     });
-}
+};
 
 function viewRoles() {
     db.query('SELECT * FROM roles', function (err, results) {
@@ -83,10 +76,10 @@ function viewRoles() {
             console.error('Error viewing roles:', err);
         } else {
             console.table(results);
+            init();
         }
-        init();
     });
-}
+};
 
 function viewEmployees() {
     db.query('SELECT * FROM employees', function (err, results) {
@@ -94,10 +87,10 @@ function viewEmployees() {
             console.error('Error viewing employees:', err);
         } else {
             console.table(results);
+            init();
         }
-        init();
     });
-}
+};
 
 function addDepartment() {
     inquirer.prompt({
@@ -116,11 +109,11 @@ function addDepartment() {
             init();
         });
     });
-}
+};
 
 
 function addRole(){
-    const question = [
+    inquirer.prompt([
         {
             type: 'input',
             name: 'id',
@@ -141,9 +134,7 @@ function addRole(){
             name: 'departmentId',
             message: 'Enter the department id for role.'
         }
-    ]
-
-    inquirer.prompt(question)
+    ])
     .then((answer) => {
         db.query('INSERT INTO role(id, title, salary, department_id) VALUES(?, ?, ?, ?)', 
         [answer.id, answer.title, answer.salary, answer.departmentId], 
@@ -160,7 +151,7 @@ function addRole(){
 
 
 function addEmployee(){
-    const question = [
+    inquirer.prompt([
         {
             type: 'input',
             name: 'id',
@@ -186,9 +177,7 @@ function addEmployee(){
             name: 'managerId',
             message: 'Enter manager id for employee'
         }
-    ]
-
-    inquirer.prompt(question)
+    ])
     .then((answer) => {
         db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?, ?, ?, ?, ?)', 
         [answer.id, answer.lastName, answer.firstName, answer.positionId, answer.managerId],
