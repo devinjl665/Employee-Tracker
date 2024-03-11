@@ -1,8 +1,11 @@
+/*Checks to see if database already exists and allows you to create database if not*/
 DROP DATABASE IF EXISTS employee_db;
 CREATE DATABASE employee_db;
 
+/*Insert into mysql to switch to this database*/
 USE employee_db;
 
+/*Insert into mysql to create the parameter for the tables for departments, roles, and employees*/
 CREATE TABLE departments (
     id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     name VARCHAR(30) NOT NULL

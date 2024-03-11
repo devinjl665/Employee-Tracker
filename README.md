@@ -8,13 +8,17 @@ Your assignment this week is to build a command-line application from scratch to
 
 <a href="">Employee Tracker Demo Vid</a>
 
+## Installation
+
+<a href="https://www.npmjs.com/package/mysql2">MySQL</a> is the newest implementation used for the project. It also uses Inquirer and Node.js. All three must be installed in order for this project to function properly. You can run "npm install" in the integrated terminal to install any other dependencies possibly needed for this project. 
+
 ## Usage
 
-
+Run "npm start" in the project's integrated terminal. Once the project has started you will given options to view departments, roles, and employees or add a department, role, and employee. You will also be given the option to update an existing employee's role and manager id. If you choose to add or update, you will be met with prompts to complete task. Lastly, if you no longer need to access or update the database, you can exit the application.
 
 ## Credits
 
-
+I wrote this code with the help of Wash U in Saint Louis coursework, Stack Overflow, and W3Schools. I referenced mysql documentation for proper use as well.
 
 ## User Story
 

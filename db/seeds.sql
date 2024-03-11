@@ -1,3 +1,4 @@
+/* Existing data to be entered into the mysql database */
 INSERT INTO departments (name)
 VALUES ('Sales'),
        ('Management'),

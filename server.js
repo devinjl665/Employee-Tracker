@@ -1,6 +1,8 @@
+// Import required modules
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 
+// Create a MySQL connection
 const db = mysql.createConnection({
     host: 'localhost',
     port: 3306,
@@ -11,6 +13,7 @@ const db = mysql.createConnection({
 
 console.log('Welcome to your employee database!');
 
+// Main function to initiate the application
 function init() {
     inquirer.prompt([
         {
@@ -30,6 +33,7 @@ function init() {
         }
     ])
     .then((answer) => {
+        // Switch based on user choice
         switch (answer.choices) {
             case 'View all departments':
                 viewDepartments();
@@ -58,6 +62,7 @@ function init() {
     });    
 };
 
+// Function to view all departments
 function viewDepartments() {
     db.query('SELECT * FROM departments', function (err, results) {
         if (err) {
@@ -69,6 +74,7 @@ function viewDepartments() {
     });
 };
 
+// Function to view all roles
 function viewRoles() {
     db.query('SELECT * FROM roles', function (err, results) {
         if (err) {
@@ -80,6 +86,7 @@ function viewRoles() {
     });
 };
 
+// Function to view all employees
 function viewEmployees() {
     db.query('SELECT * FROM employees', function (err, results) {
         if (err) {
@@ -91,6 +98,7 @@ function viewEmployees() {
     });
 };
 
+// Function to add a department
 function addDepartment() {
     inquirer.prompt({
         type: 'input',
@@ -110,7 +118,7 @@ function addDepartment() {
     });
 };
 
-
+// Function to add a role
 function addRole(){
     inquirer.prompt([
         {
@@ -148,7 +156,7 @@ function addRole(){
     })
 };
 
-
+// Function to add an employee
 function addEmployee(){
     inquirer.prompt([
         {
@@ -191,6 +199,7 @@ function addEmployee(){
     })
 };
 
+// Function to update an employee's role
 function updateEmployeeRole() {
     db.query('SELECT * FROM employees', function (err, employees) {
         if (err) {
@@ -204,6 +213,7 @@ function updateEmployeeRole() {
                 } else {
                     console.table(roles);
 
+                    // Prompt user to select employee, role, and manager
                     inquirer.prompt([
                         {
                             name: 'employeeId',
@@ -228,23 +238,26 @@ function updateEmployeeRole() {
                             type: 'list',
                             message: 'Select new manager for the employee:',
                             choices: [
-                                employees.map(manager => ({
+                                ...employees.map(manager => ({
+                                    name: `${manager.first_name} ${manager.last_name}`,
                                     value: manager.id
                                 })),
                                 {
+                                    name: 'None',
                                     value: null
                                 }
                             ]  
                         }
                     ])
                     .then(answer => {
+                        // Update the employee's role and manager in the database
                         const { employeeId, roleId, managerId } = answer;
                         db.query('UPDATE employees SET role_id = ?, manager_id = ? WHERE id = ?', [roleId, managerId, employeeId], function (err, result) {
                             if (err) {
                                 console.log(err);
                             } else {
                                 console.log('Employee role and manager updated successfully!');
-                                init();
+                                init(); // Go back to the main menu
                             }
                         });
                     });
@@ -253,5 +266,6 @@ function updateEmployeeRole() {
         }
     });
 }
-                    
+
+// Call the init function to start the application
 init();
