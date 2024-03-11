@@ -12,7 +12,6 @@ const db = mysql.createConnection({
 console.log('Welcome to your employee database!');
 
 function init() {
-    console.log('Before inquirer prompt');
     inquirer.prompt([
         {
             type: 'list',
@@ -136,7 +135,7 @@ function addRole(){
         }
     ])
     .then((answer) => {
-        db.query('INSERT INTO role(id, title, salary, department_id) VALUES(?, ?, ?, ?)', 
+        db.query('INSERT INTO roles(id, title, salary, department_id) VALUES(?, ?, ?, ?)', 
         [answer.id, answer.title, answer.salary, answer.departmentId], 
         function (err, results){
             if (err) {
