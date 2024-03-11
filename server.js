@@ -158,28 +158,28 @@ function addEmployee(){
         },
         {
             type: 'input',
-            name: 'lastName',
+            name: 'last_name',
             message: 'Enter employee last name.'
         },
         {
             type: 'input',
-            name: 'firstName',
+            name: 'first_name',
             message: 'Enter employee first name.'
         },
         {
             type: 'input',
-            name: 'positionId',
+            name: 'position_id',
             message: 'Enter the role id for employee.'
         },
         {
             type: 'input',
-            name: 'managerId',
+            name: 'manager_id',
             message: 'Enter manager id for employee'
         }
     ])
     .then((answer) => {
         db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?, ?, ?, ?, ?)', 
-        [answer.id, answer.lastName, answer.firstName, answer.positionId, answer.managerId],
+        [answer.id, answer.last_name, answer.first_name, answer.position_id, answer.manager_id],
         function (err, results) {
             if (err) {
                 console.log(err);
