@@ -15,7 +15,7 @@ function init() {
     inquirer.prompt([
         {
             type: 'list',
-            name: 'markdown',
+            name: 'choices',
             message: 'What would you like to do?',
             choices: [
                 'View all departments',
@@ -24,13 +24,13 @@ function init() {
                 'Add a department',
                 'Add a role',
                 'Add an employee',
-                'Update an employee position',
+                'Update an employee role',
                 'Exit'
             ],
         }
     ])
     .then((answer) => {
-        switch (answer.markdown) {
+        switch (answer.choices) {
             case 'View all departments':
                 viewDepartments();
                 break;
@@ -49,7 +49,7 @@ function init() {
             case 'Add an employee':
                 addEmployee();
                 break;
-            case 'Update an employee position':
+            case 'Update an employee role':
                 updateEmployeePosition();
                 break;
             case 'Exit':
@@ -168,7 +168,7 @@ function addEmployee(){
         },
         {
             type: 'input',
-            name: 'position_id',
+            name: 'role_id',
             message: 'Enter the role id for employee.'
         },
         {
@@ -178,8 +178,8 @@ function addEmployee(){
         }
     ])
     .then((answer) => {
-        db.query('INSERT INTO employees(id, lastName, firstName, position_id, manager_id) VALUES(?, ?, ?, ?, ?)', 
-        [answer.id, answer.last_name, answer.first_name, answer.position_id, answer.manager_id],
+        db.query('INSERT INTO employees(id, last_name, first_name, role_id, manager_id) VALUES(?, ?, ?, ?, ?)', 
+        [answer.id, answer.last_name, answer.first_name, answer.role_id, answer.manager_id],
         function (err, results) {
             if (err) {
                 console.log(err);
