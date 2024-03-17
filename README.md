@@ -6,7 +6,7 @@ Your assignment this week is to build a command-line application from scratch to
 
 ## Demo
 
-<a href="">Employee Tracker Demo Vid</a>
+<a href="https://drive.google.com/file/d/1ct3XNz0HxwoZOvhV_camGaPNP5fsUQPw/view?usp=drive_link">Employee Tracker Demo Vid</a>
 
 ## Installation
 

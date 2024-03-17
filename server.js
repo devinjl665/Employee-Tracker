@@ -239,7 +239,7 @@ function updateEmployeeRole() {
                             message: 'Select new manager for the employee:',
                             choices: [
                                 ...employees.map(manager => ({
-                                    name: `${manager.first_name} ${manager.last_name}`,
+                                    name: manager.id,
                                     value: manager.id
                                 })),
                                 {
